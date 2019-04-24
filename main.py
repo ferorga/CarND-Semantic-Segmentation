@@ -19,17 +19,18 @@ if not tf.test.gpu_device_name():
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 
-L2_REG = 1e-5
+L2_REG = 1e-4
 STDEV = 1e-2
-KEEP_PROB = 0.8
-LEARNING_RATE = 1e-4
-EPOCHS = 20
-BATCH_SIZE = 8
+KEEP_PROB = 0.6
+LEARNING_RATE = 1e-3
+EPOCHS = 30
+BATCH_SIZE = 5
 IMAGE_SHAPE_KITI = (160, 576)
 NUM_CLASSES = 2
 
 DATA_DIR = './data'
 RUNS_DIR = './runs'
+
 
 def load_vgg(sess, vgg_path):
     """
@@ -48,14 +49,14 @@ def load_vgg(sess, vgg_path):
     graph = tf.get_default_graph()
     tf.saved_model.loader.load(sess, [vgg_tag], vgg_path)
 
-    input_image = graph.get_tensor_by_name(vgg_input_tensor_name)
+    img_input = graph.get_tensor_by_name(vgg_input_tensor_name)
     keep_prob = graph.get_tensor_by_name(vgg_keep_prob_tensor_name)
 
     layer3 = graph.get_tensor_by_name(vgg_layer3_out_tensor_name)
     layer4 = graph.get_tensor_by_name(vgg_layer4_out_tensor_name)
     layer7 = graph.get_tensor_by_name(vgg_layer7_out_tensor_name)
 
-    return input_image, keep_prob, layer3, layer4, layer7
+    return img_input, keep_prob, layer3, layer4, layer7
 
 
 tests.test_load_vgg(load_vgg, tf)
